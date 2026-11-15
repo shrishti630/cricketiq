@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Trophy, 
   Users, 
   Activity, 
   BarChart3, 
   Bot, 
-  Sparkles,
+  Sparkles, 
   Zap,
   Key,
   X,
-  Check
+  Check,
+  Radio,
+  Globe
 } from 'lucide-react';
-import { getGeminiKey, setGeminiKey } from '../../services/api';
+import { getGeminiKey, setGeminiKey, saveLiveKey, fetchLiveStatus } from '../../services/api';
 
 interface NavbarProps {
   activeTab: string;
@@ -21,8 +23,17 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAIDrawer }) => {
   const [showKeyModal, setShowKeyModal] = useState(false);
-  const [keyInput, setKeyInput] = useState(getGeminiKey());
+  const [modalTab, setModalTab] = useState<'gemini' | 'cricbuzz'>('cricbuzz');
+  const [geminiKeyInput, setGeminiKeyInput] = useState(getGeminiKey());
+  const [cricbuzzKeyInput, setCricbuzzKeyInput] = useState('');
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [liveProviderInfo, setLiveProviderInfo] = useState<any>(null);
+
+  useEffect(() => {
+    if (showKeyModal) {
+      fetchLiveStatus().then(res => setLiveProviderInfo(res?.configuration || null));
+    }
+  }, [showKeyModal]);
 
   const franchiseBadges = [
     { code: 'CSK', color: '#B45309', bg: '#FEF3C7', border: '#FDE68A' },
@@ -46,8 +57,21 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
     { id: 'ai-war-room', label: 'AI Intelligence Hub', icon: Bot, isSpecial: true },
   ];
 
-  const handleSaveKey = () => {
-    setGeminiKey(keyInput.trim());
+  const handleSaveGemini = () => {
+    setGeminiKey(geminiKeyInput.trim());
+    setSavedSuccess(true);
+    setTimeout(() => {
+      setSavedSuccess(false);
+      setShowKeyModal(false);
+    }, 1200);
+  };
+
+  const handleSaveCricbuzz = async () => {
+    if (cricbuzzKeyInput.trim()) {
+      await saveLiveKey('rapidapi_cricbuzz', cricbuzzKeyInput.trim());
+      const status = await fetchLiveStatus();
+      setLiveProviderInfo(status?.configuration || null);
+    }
     setSavedSuccess(true);
     setTimeout(() => {
       setSavedSuccess(false);
@@ -172,18 +196,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
         })}
       </div>
 
-      {/* Live Gemini LLM Key Modal */}
+      {/* Live Integrations Modal (Cricbuzz Live Data + Gemini AI) */}
       {showKeyModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl">
+          <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl">
+            {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center space-x-2.5">
                 <div className="p-2 rounded-xl bg-amber-100 text-amber-800">
                   <Key className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900">Connect Live Gemini LLM</h3>
-                  <p className="text-[11px] text-slate-500">Autonomous tool-calling over PostgreSQL ipl_db</p>
+                  <h3 className="text-base font-black text-slate-900">Live Cricket & AI Integrations</h3>
+                  <p className="text-[11px] text-slate-500">Live data fetching into PostgreSQL ipl_db</p>
                 </div>
               </div>
               <button
@@ -194,22 +219,85 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
               </button>
             </div>
 
-            <div className="py-4 space-y-3 text-xs text-slate-600 leading-relaxed">
-              <p>
-                Enter your Google <strong>Gemini API Key</strong> to enable real generative agent reasoning with live PostgreSQL tool-calling.
-              </p>
-              <input
-                type="password"
-                value={keyInput}
-                onChange={(e) => setKeyInput(e.target.value)}
-                placeholder="AIzaSy..."
-                className="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none"
-              />
-              <p className="text-[10px] text-slate-400">
-                Your key is stored securely in your browser's local session. If omitted, CricketIQ runs its high-speed grounded factual tool engine.
-              </p>
+            {/* Tab Switcher */}
+            <div className="flex border-b border-slate-100 mt-4">
+              <button
+                onClick={() => setModalTab('cricbuzz')}
+                className={`flex-1 py-2 text-xs font-bold border-b-2 transition flex items-center justify-center space-x-1.5 cursor-pointer ${
+                  modalTab === 'cricbuzz'
+                    ? 'border-amber-500 text-amber-800 bg-amber-50/50'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <Radio className="w-3.5 h-3.5" />
+                <span>Live Cricbuzz / Cricket API</span>
+              </button>
+              <button
+                onClick={() => setModalTab('gemini')}
+                className={`flex-1 py-2 text-xs font-bold border-b-2 transition flex items-center justify-center space-x-1.5 cursor-pointer ${
+                  modalTab === 'gemini'
+                    ? 'border-amber-500 text-amber-800 bg-amber-50/50'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <Bot className="w-3.5 h-3.5" />
+                <span>Google Gemini LLM</span>
+              </button>
             </div>
 
+            {/* Cricbuzz Tab Content */}
+            {modalTab === 'cricbuzz' && (
+              <div className="py-4 space-y-3.5 text-xs text-slate-600 leading-relaxed">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center justify-between text-xs font-semibold text-slate-800 mb-1">
+                    <span>Active Provider:</span>
+                    <span className="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      {liveProviderInfo?.provider || 'Autonomous Cricbuzz Engine'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Syncs active ball-by-ball match states, live player stats, and IPL points table directly into your PostgreSQL <code>ipl_db</code> database.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    RapidAPI Cricbuzz / CricAPI Key (Optional)
+                  </label>
+                  <input
+                    type="password"
+                    value={cricbuzzKeyInput}
+                    onChange={(e) => setCricbuzzKeyInput(e.target.value)}
+                    placeholder="Enter RapidAPI Key or CricAPI Key..."
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none"
+                  />
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    If you have an official RapidAPI Cricbuzz key, paste it here. If left blank, CricketIQ runs its high-fidelity dynamic live feed engine to update PostgreSQL <code>ipl_db</code> continuously.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Gemini Tab Content */}
+            {modalTab === 'gemini' && (
+              <div className="py-4 space-y-3.5 text-xs text-slate-600 leading-relaxed">
+                <p>
+                  Enter your Google <strong>Gemini API Key</strong> to activate live generative reasoning with autonomous PostgreSQL <code>ipl_db</code> tool calling.
+                </p>
+                <input
+                  type="password"
+                  value={geminiKeyInput}
+                  onChange={(e) => setGeminiKeyInput(e.target.value)}
+                  placeholder="AIzaSy..."
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-amber-500 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none"
+                />
+                <p className="text-[10px] text-slate-400">
+                  Your key is stored securely in your browser session and used for deep natural language cricket intelligence.
+                </p>
+              </div>
+            )}
+
+            {/* Modal Actions */}
             <div className="pt-3 border-t border-slate-100 flex items-center justify-end space-x-2">
               <button
                 onClick={() => setShowKeyModal(false)}
@@ -218,16 +306,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
                 Cancel
               </button>
               <button
-                onClick={handleSaveKey}
+                onClick={modalTab === 'cricbuzz' ? handleSaveCricbuzz : handleSaveGemini}
                 className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-black text-xs font-black transition flex items-center space-x-1.5 cursor-pointer shadow-xs"
               >
                 {savedSuccess ? (
                   <>
                     <Check className="w-4 h-4 text-black" />
-                    <span>Key Connected!</span>
+                    <span>Configuration Saved!</span>
                   </>
                 ) : (
-                  <span>Save & Connect</span>
+                  <span>Save Configuration</span>
                 )}
               </button>
             </div>

@@ -47,12 +47,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
 
   const handleSync = async () => {
     setSyncing(true);
-    setSyncStatus('Fetching real-time updates from ipl_db...');
+    setSyncStatus('Fetching real-time live match, player stats & standings into PostgreSQL ipl_db...');
     try {
-      await syncLiveMatches();
+      const res = await syncLiveMatches();
       await loadData();
-      setSyncStatus('Live Data Synchronized with PostgreSQL ipl_db');
-      setTimeout(() => setSyncStatus(null), 4000);
+      const scoreMsg = res.live_score ? `Live Score: ${res.live_score}` : 'Tables Updated';
+      setSyncStatus(`Synchronized with ipl_db — ${scoreMsg}`);
+      setTimeout(() => setSyncStatus(null), 6000);
     } catch {
       setSyncStatus('Synced latest local data');
       setTimeout(() => setSyncStatus(null), 3000);
@@ -107,12 +108,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
           </div>
 
           {syncStatus && (
-            <div className="mb-4 -mt-2 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 flex items-center justify-between">
+            <div className="mb-4 -mt-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
               <span className="flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>{syncStatus}</span>
               </span>
-              <span className="text-[10px] uppercase font-bold text-emerald-600">PostgreSQL ipl_db</span>
+              <div className="flex items-center space-x-2 text-[10px] uppercase font-bold text-emerald-700">
+                <span>Updated in pgAdmin: matches, player_stats, points_table</span>
+                <span className="px-1.5 py-0.5 rounded bg-emerald-100 border border-emerald-300">PostgreSQL ipl_db</span>
+              </div>
             </div>
           )}
 
