@@ -4,7 +4,6 @@ import {
   Users, 
   Activity, 
   BarChart3, 
-  ShieldAlert, 
   Bot, 
   Sparkles,
   Zap
@@ -18,16 +17,16 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAIDrawer }) => {
   const franchiseBadges = [
-    { code: 'CSK', color: '#F9CD05', border: '#D97706' },
-    { code: 'MI', color: '#004BA0', border: '#2563EB' },
-    { code: 'RCB', color: '#EC1C24', border: '#DC2626' },
-    { code: 'KKR', color: '#3A225D', border: '#7C3AED' },
-    { code: 'SRH', color: '#F26522', border: '#EA580C' },
-    { code: 'RR', color: '#EA1A85', border: '#DB2777' },
-    { code: 'GT', color: '#1B2133', border: '#475569' },
-    { code: 'LSG', color: '#0057E7', border: '#3B82F6' },
-    { code: 'DC', color: '#004C93', border: '#0284C7' },
-    { code: 'PK', color: '#ED1B24', border: '#E11D48' },
+    { code: 'CSK', color: '#B45309', bg: '#FEF3C7', border: '#FDE68A' },
+    { code: 'MI', color: '#1D4ED8', bg: '#DBEAFE', border: '#BFDBFE' },
+    { code: 'RCB', color: '#B91C1C', bg: '#FEE2E2', border: '#FECACA' },
+    { code: 'KKR', color: '#6D28D9', bg: '#EDE9FE', border: '#DDD6FE' },
+    { code: 'SRH', color: '#C2410C', bg: '#FFEDD5', border: '#FED7AA' },
+    { code: 'RR', color: '#BE185D', bg: '#FCE7F3', border: '#FBCFE8' },
+    { code: 'GT', color: '#334155', bg: '#F1F5F9', border: '#E2E8F0' },
+    { code: 'LSG', color: '#0369A1', bg: '#E0F2FE', border: '#BAE6FD' },
+    { code: 'DC', color: '#0284C7', bg: '#E0F2FE', border: '#BAE6FD' },
+    { code: 'PK', color: '#BE123C', bg: '#FFE4E6', border: '#FECDD3' },
   ];
 
   const navItems = [
@@ -40,17 +39,17 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-pitch-border/80 bg-[#070A11]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-sm">
       {/* Franchise Mini Crest Ticker */}
-      <div className="hidden md:flex items-center justify-between border-b border-pitch-border/40 px-6 py-1 text-xs text-slate-400 bg-pitch-dark/80">
+      <div className="hidden md:flex items-center justify-between border-b border-slate-100 px-6 py-1.5 text-xs bg-slate-50">
         <div className="flex items-center space-x-3">
-          <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">Official Franchises:</span>
-          <div className="flex items-center space-x-2">
+          <span className="font-bold text-slate-500 uppercase tracking-wider text-[10px]">Official Franchises:</span>
+          <div className="flex items-center space-x-1.5">
             {franchiseBadges.map((f) => (
               <span 
                 key={f.code}
-                className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition hover:scale-105 cursor-pointer"
-                style={{ backgroundColor: `${f.color}20`, color: f.color, border: `1px solid ${f.border}40` }}
+                className="px-2 py-0.5 rounded text-[10px] font-black tracking-wider transition hover:scale-105 cursor-pointer shadow-xs"
+                style={{ backgroundColor: f.bg, color: f.color, border: `1px solid ${f.border}` }}
                 onClick={() => setActiveTab('teams')}
               >
                 {f.code}
@@ -59,16 +58,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
           </div>
         </div>
         <div className="flex items-center space-x-3 text-[11px]">
-          <span className="flex items-center text-emerald-400 font-medium">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping mr-1.5"></span>
+          <span className="flex items-center text-emerald-600 font-bold">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping mr-1.5"></span>
             LIVE: CSK vs MI (15.4 ov)
           </span>
-          <span className="text-slate-600">|</span>
-          <span className="text-amber-400/90 font-medium">Season 2025</span>
+          <span className="text-slate-300">|</span>
+          <span className="text-slate-600 font-semibold">Season 2025</span>
         </div>
       </div>
 
-      {/* Main Sports Navigation Bar */}
+      {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo / Branding */}
@@ -76,15 +75,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
             className="flex items-center space-x-3 cursor-pointer group"
             onClick={() => setActiveTab('dashboard')}
           >
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 shadow-glow-gold group-hover:scale-105 transition-transform">
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-md group-hover:scale-105 transition-transform">
               <span className="text-xl">🏏</span>
             </div>
             <div>
               <div className="flex items-center space-x-1.5">
-                <span className="font-black text-xl tracking-tight text-white">Cricket<span className="text-amber-400">IQ</span></span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Hub</span>
+                <span className="font-black text-xl tracking-tight text-slate-900">Cricket<span className="text-amber-500">IQ</span></span>
+                <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">Hub</span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium tracking-wide">Premier IPL Intelligence</p>
+              <p className="text-[10px] text-slate-500 font-medium tracking-wide">Premier IPL Intelligence</p>
             </div>
           </div>
 
@@ -100,15 +99,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
                   className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-all ${
                     isActive
                       ? item.isSpecial
-                        ? 'bg-gradient-to-r from-amber-500/20 to-purple-500/20 text-amber-400 border border-amber-500/40 shadow-glow-gold'
-                        : 'bg-pitch-surface text-amber-400 border border-amber-500/30'
-                      : 'text-slate-300 hover:text-white hover:bg-pitch-surface/60'
+                        ? 'bg-amber-100 text-amber-900 border border-amber-300 font-bold shadow-xs'
+                        : 'bg-slate-100 text-slate-900 font-bold border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-600' : 'text-slate-400'}`} />
                   <span>{item.label}</span>
                   {item.isSpecial && (
-                    <span className="ml-1 text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600 text-black">
+                    <span className="ml-1 text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-amber-500 text-white">
                       Agent
                     </span>
                   )}
@@ -121,27 +120,25 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, openAID
           <div className="flex items-center space-x-3">
             <button
               onClick={openAIDrawer}
-              className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xs font-bold rounded-xl group bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-500 group-hover:from-amber-600 group-hover:to-yellow-600 hover:text-white text-black shadow-glow-gold transition-all active:scale-95"
+              className="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl text-black bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 shadow-sm hover:shadow transition-all active:scale-95 cursor-pointer space-x-2 border border-amber-300"
             >
-              <span className="relative px-3.5 py-2 transition-all ease-in duration-75 bg-[#0A0E17] text-white rounded-[10px] group-hover:bg-opacity-0 group-hover:text-black flex items-center space-x-2">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:text-black animate-pulse" />
-                <span className="font-bold">Ask AI Analyst</span>
-              </span>
+              <Sparkles className="w-3.5 h-3.5 text-black" />
+              <span>Ask AI Analyst</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Navigation bar */}
-      <div className="lg:hidden flex items-center overflow-x-auto px-4 py-2 space-x-2 border-t border-pitch-border/50 bg-[#090D15]">
+      <div className="lg:hidden flex items-center overflow-x-auto px-4 py-2 space-x-2 border-t border-slate-200 bg-white">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`whitespace-nowrap px-3 py-1.5 rounded-md text-xs font-medium transition ${
-                isActive ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'text-slate-400 hover:text-slate-200'
+              className={`whitespace-nowrap px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                isActive ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               {item.label}

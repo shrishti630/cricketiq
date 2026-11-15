@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  Activity, 
   Flame, 
   Trophy, 
   Sparkles, 
   ChevronRight, 
-  ArrowUpRight,
-  Shield, 
+  ArrowUpRight, 
   Calendar, 
-  Clock, 
   MapPin,
   Bot
 } from 'lucide-react';
@@ -45,33 +42,33 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
   }, []);
 
   const liveMatch = matches.find(m => m.status === 'LIVE') || matches[0];
-  const upcomingMatches = matches.filter(m => m.status === 'UPCOMING');
 
   return (
     <div className="space-y-8 pb-12">
       {/* Hero Live Match Center Banner */}
       {liveMatch && (
-        <section className="relative overflow-hidden rounded-2xl glass-panel border-amber-500/30 p-6 md:p-8 bg-gradient-to-r from-[#0C1222] via-[#111A30] to-[#0A0E1A] shadow-2xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+        <section className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
+          {/* Subtle gold accent top line */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-400"></div>
 
           {/* Top Status Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-pitch-border/60">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-slate-100">
             <div className="flex items-center space-x-3">
-              <span className="flex items-center px-3 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 text-xs font-black uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-red-400 animate-ping mr-2"></span>
+              <span className="flex items-center px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 text-xs font-black uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping mr-2"></span>
                 Match #{liveMatch.match_number} • {liveMatch.status}
               </span>
-              <span className="text-xs text-slate-400 flex items-center">
-                <MapPin className="w-3.5 h-3.5 mr-1 text-slate-500" />
+              <span className="text-xs text-slate-500 flex items-center font-medium">
+                <MapPin className="w-3.5 h-3.5 mr-1 text-slate-400" />
                 {liveMatch.venue.name}, {liveMatch.venue.city}
               </span>
             </div>
 
             <button
               onClick={() => onOpenAIWithQuery(`Analyze tactical state for ${liveMatch.home_team.name} vs ${liveMatch.away_team.name}`)}
-              className="flex items-center space-x-2 text-xs font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3.5 py-1.5 rounded-lg transition"
+              className="flex items-center space-x-2 text-xs font-bold text-amber-800 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3.5 py-1.5 rounded-lg transition cursor-pointer"
             >
-              <Bot className="w-3.5 h-3.5" />
+              <Bot className="w-3.5 h-3.5 text-amber-600" />
               <span>AI Match Intelligence</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
@@ -82,24 +79,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
             {/* Home Team */}
             <div className="flex items-center space-x-4">
               <div 
-                className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-lg shrink-0"
+                className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-md shrink-0"
                 style={{ backgroundColor: liveMatch.home_team.color }}
               >
                 {liveMatch.home_team.short_name}
               </div>
               <div>
-                <h3 className="text-xl font-extrabold text-white">{liveMatch.home_team.name}</h3>
-                <p className="text-2xl font-black text-amber-400 mt-0.5">{liveMatch.home_score || '189/4 (20.0)'}</p>
-                <span className="text-xs text-slate-400 font-medium">1st Innings Target: 190</span>
+                <h3 className="text-xl font-black text-slate-900">{liveMatch.home_team.name}</h3>
+                <p className="text-2xl font-black text-amber-600 mt-0.5">{liveMatch.home_score || '189/4 (20.0)'}</p>
+                <span className="text-xs text-slate-500 font-semibold">1st Innings Target: 190</span>
               </div>
             </div>
 
             {/* VS & Live State Headline */}
             <div className="text-center px-4">
-              <span className="text-xs font-black px-3 py-1 rounded-md bg-pitch-surface text-slate-400 border border-pitch-border">
+              <span className="text-xs font-black px-3 py-1 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
                 VS
               </span>
-              <p className="text-xs font-medium text-emerald-400 mt-3 leading-relaxed">
+              <p className="text-xs font-semibold text-emerald-700 mt-3 leading-relaxed">
                 {liveMatch.live_headline || 'Match in decisive phase'}
               </p>
             </div>
@@ -107,12 +104,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
             {/* Away Team */}
             <div className="flex items-center space-x-4 md:justify-end text-left md:text-right">
               <div className="order-2 md:order-1">
-                <h3 className="text-xl font-extrabold text-white">{liveMatch.away_team.name}</h3>
-                <p className="text-2xl font-black text-cyan-400 mt-0.5">{liveMatch.away_score || '148/5 (15.4)'}</p>
-                <span className="text-xs text-slate-400 font-medium">Req RR: 9.69</span>
+                <h3 className="text-xl font-black text-slate-900">{liveMatch.away_team.name}</h3>
+                <p className="text-2xl font-black text-blue-600 mt-0.5">{liveMatch.away_score || '148/5 (15.4)'}</p>
+                <span className="text-xs text-slate-500 font-semibold">Req RR: 9.69</span>
               </div>
               <div 
-                className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-lg shrink-0 order-1 md:order-2"
+                className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white shadow-md shrink-0 order-1 md:order-2"
                 style={{ backgroundColor: liveMatch.away_team.color }}
               >
                 {liveMatch.away_team.short_name}
@@ -121,22 +118,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
           </div>
 
           {/* Win Probability Bar */}
-          <div className="pt-4 border-t border-pitch-border/50">
+          <div className="pt-4 border-t border-slate-100">
             <div className="flex items-center justify-between text-xs font-bold mb-2">
-              <span className="text-amber-400">
+              <span className="text-amber-700">
                 {liveMatch.home_team.short_name} {liveMatch.win_probability_home}% Win Probability
               </span>
-              <span className="text-cyan-400">
+              <span className="text-blue-700">
                 {liveMatch.away_team.short_name} {Math.round(100 - liveMatch.win_probability_home)}% Win Probability
               </span>
             </div>
-            <div className="w-full h-2.5 rounded-full bg-pitch-dark overflow-hidden flex border border-pitch-border/50">
+            <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden flex border border-slate-200">
               <div 
-                className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-700"
+                className="h-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-700"
                 style={{ width: `${liveMatch.win_probability_home}%` }}
               ></div>
               <div 
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-700"
+                className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-700"
                 style={{ width: `${100 - liveMatch.win_probability_home}%` }}
               ></div>
             </div>
@@ -151,11 +148,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Flame className="w-5 h-5 text-amber-500" />
-              <h2 className="text-lg font-bold text-white tracking-wide">High-Stakes IPL Fixtures</h2>
+              <h2 className="text-lg font-black text-slate-900 tracking-tight">High-Stakes IPL Fixtures</h2>
             </div>
             <button 
               onClick={() => onNavigate('standings')}
-              className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center space-x-1"
+              className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center space-x-1 cursor-pointer"
             >
               <span>View Full Schedule</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -164,14 +161,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {matches.slice(1, 5).map((m) => (
-              <div key={m.id} className="p-5 rounded-xl glass-panel glass-panel-hover flex flex-col justify-between">
+              <div key={m.id} className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 pb-3 border-b border-pitch-border/50">
-                    <span className="flex items-center">
-                      <Calendar className="w-3 h-3 mr-1 text-slate-500" />
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pb-3 border-b border-slate-100">
+                    <span className="flex items-center font-medium">
+                      <Calendar className="w-3 h-3 mr-1 text-slate-400" />
                       {m.date}
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-pitch-surface text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-bold">
                       {m.time}
                     </span>
                   </div>
@@ -183,9 +180,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
                           className="w-3.5 h-3.5 rounded-full"
                           style={{ backgroundColor: m.home_team.color }}
                         ></span>
-                        <span className="font-bold text-sm text-white">{m.home_team.name}</span>
+                        <span className="font-bold text-sm text-slate-900">{m.home_team.name}</span>
                       </div>
-                      <span className="text-xs font-semibold text-slate-400">{m.home_score || '-'}</span>
+                      <span className="text-xs font-semibold text-slate-500">{m.home_score || '-'}</span>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -194,20 +191,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
                           className="w-3.5 h-3.5 rounded-full"
                           style={{ backgroundColor: m.away_team.color }}
                         ></span>
-                        <span className="font-bold text-sm text-white">{m.away_team.name}</span>
+                        <span className="font-bold text-sm text-slate-900">{m.away_team.name}</span>
                       </div>
-                      <span className="text-xs font-semibold text-slate-400">{m.away_score || '-'}</span>
+                      <span className="text-xs font-semibold text-slate-500">{m.away_score || '-'}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-pitch-border/50 flex items-center justify-between text-xs">
-                  <span className="text-slate-500 truncate max-w-[150px]">{m.venue.city}</span>
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-slate-500 truncate max-w-[150px] font-medium">{m.venue.city}</span>
                   <button
                     onClick={() => onOpenAIWithQuery(`Tactical preview for ${m.home_team.short_name} vs ${m.away_team.short_name}`)}
-                    className="text-amber-400 hover:text-amber-300 font-semibold flex items-center space-x-1"
+                    className="text-amber-700 hover:text-amber-800 font-bold flex items-center space-x-1 cursor-pointer"
                   >
-                    <Sparkles className="w-3 h-3" />
+                    <Sparkles className="w-3 h-3 text-amber-500" />
                     <span>Scout Match</span>
                   </button>
                 </div>
@@ -216,10 +213,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
           </div>
 
           {/* Fast Strategic AI Prompts Chips */}
-          <div className="p-5 rounded-2xl glass-panel bg-gradient-to-r from-amber-950/20 to-purple-950/20 border border-amber-500/20">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
             <div className="flex items-center space-x-2 mb-3">
-              <Bot className="w-4 h-4 text-amber-400" />
-              <h3 className="text-sm font-bold text-white">Ask CricketIQ Agent</h3>
+              <Bot className="w-4 h-4 text-amber-600" />
+              <h3 className="text-sm font-black text-slate-900">Ask CricketIQ Agent</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               {[
@@ -231,17 +228,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
                 <button
                   key={idx}
                   onClick={() => onOpenAIWithQuery(chip.query)}
-                  className="p-3 text-left rounded-xl bg-pitch-card hover:bg-pitch-surface border border-pitch-border/70 hover:border-amber-500/50 transition group flex items-center justify-between"
+                  className="p-3 text-left rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 transition group flex items-center justify-between cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-0.5">
+                    <span className="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider block mb-0.5">
                       {chip.title}
                     </span>
-                    <span className="text-slate-300 group-hover:text-white font-medium">
+                    <span className="text-slate-700 group-hover:text-slate-900 font-medium">
                       {chip.query}
                     </span>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 shrink-0 ml-2" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 shrink-0 ml-2" />
                 </button>
               ))}
             </div>
@@ -253,34 +250,34 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Trophy className="w-5 h-5 text-amber-500" />
-              <h2 className="text-lg font-bold text-white tracking-wide">IPL Points Table</h2>
+              <h2 className="text-lg font-black text-slate-900 tracking-tight">IPL Points Table</h2>
             </div>
             <button 
               onClick={() => onNavigate('standings')}
-              className="text-xs font-semibold text-amber-400 hover:text-amber-300"
+              className="text-xs font-bold text-amber-700 hover:text-amber-800 cursor-pointer"
             >
               Full Table
             </button>
           </div>
 
-          <div className="rounded-xl glass-panel overflow-hidden">
+          <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
             <table className="w-full text-xs text-left">
-              <thead className="bg-[#0B0F1A] text-slate-400 border-b border-pitch-border uppercase text-[10px] font-bold">
+              <thead className="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase text-[10px] font-bold">
                 <tr>
-                  <th className="py-2.5 px-3">Pos</th>
-                  <th className="py-2.5 px-3">Team</th>
-                  <th className="py-2.5 px-2 text-center">P</th>
-                  <th className="py-2.5 px-2 text-center">W</th>
-                  <th className="py-2.5 px-3 text-right">Pts</th>
-                  <th className="py-2.5 px-3 text-right">NRR</th>
+                  <th className="py-3 px-3">Pos</th>
+                  <th className="py-3 px-3">Team</th>
+                  <th className="py-3 px-2 text-center">P</th>
+                  <th className="py-3 px-2 text-center">W</th>
+                  <th className="py-3 px-3 text-right">Pts</th>
+                  <th className="py-3 px-3 text-right">NRR</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-pitch-border/40">
+              <tbody className="divide-y divide-slate-100">
                 {standings.slice(0, 6).map((s) => (
-                  <tr key={s.team_id} className="hover:bg-pitch-surface/40 transition">
+                  <tr key={s.team_id} className="hover:bg-slate-50 transition">
                     <td className="py-2.5 px-3 font-bold text-slate-400">
                       <span className={`w-5 h-5 inline-flex items-center justify-center rounded text-[10px] ${
-                        s.position <= 4 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'text-slate-500'
+                        s.position <= 4 ? 'bg-amber-100 text-amber-800 font-bold border border-amber-200' : 'text-slate-500'
                       }`}>
                         {s.position}
                       </span>
@@ -291,13 +288,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
                           className="w-2.5 h-2.5 rounded-full shrink-0"
                           style={{ backgroundColor: s.color }}
                         ></span>
-                        <span className="font-bold text-white">{s.short_name}</span>
+                        <span className="font-bold text-slate-900">{s.short_name}</span>
                       </div>
                     </td>
-                    <td className="py-2.5 px-2 text-center text-slate-300">{s.played}</td>
-                    <td className="py-2.5 px-2 text-center text-slate-300">{s.won}</td>
-                    <td className="py-2.5 px-3 text-right font-black text-amber-400">{s.points}</td>
-                    <td className="py-2.5 px-3 text-right font-mono text-slate-400">
+                    <td className="py-2.5 px-2 text-center text-slate-600">{s.played}</td>
+                    <td className="py-2.5 px-2 text-center text-emerald-700 font-bold">{s.won}</td>
+                    <td className="py-2.5 px-3 text-right font-black text-amber-600">{s.points}</td>
+                    <td className="py-2.5 px-3 text-right font-mono font-medium text-slate-600">
                       {s.nrr > 0 ? `+${s.nrr.toFixed(3)}` : s.nrr.toFixed(3)}
                     </td>
                   </tr>
@@ -307,14 +304,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate, onOpen
           </div>
 
           {/* Quick Franchise Roster Shortcut */}
-          <div className="p-4 rounded-xl glass-panel flex items-center justify-between">
+          <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold text-white">Official IPL Franchises</p>
-              <p className="text-[11px] text-slate-400 mt-0.5">Explore 10 team squads and records</p>
+              <p className="text-xs font-bold text-slate-900">Official IPL Franchises</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">Explore 10 team squads and records</p>
             </div>
             <button
               onClick={() => onNavigate('teams')}
-              className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold hover:bg-amber-500/30 transition"
+              className="px-3.5 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold hover:bg-amber-100 transition cursor-pointer"
             >
               Explore Hub
             </button>
